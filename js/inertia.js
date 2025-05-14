@@ -4,53 +4,36 @@ function calculateRotationCenter(shapes) {
   let totX = 0, totY = 0;
 
   shapes.forEach(shape => {
-    let points = [], sumX = 0, sumY = 0, quantity = 0;
+    let points = []
 
     shape.forEach(line => {
-      points.push(line.start.x, line.start.y);
       allPoints.push(line.start.x, line.start.y);
-      sumX += line.start.x;
-      sumY += line.start.y;
-      quantity++;
     });
 
-    let area = Math.abs(PolyK.GetArea(points));
-    areas.push(area);
+   
 
-    if (!maxFound) {
-      maxes = PolyK.GetAABB(points);
-      console.log('maxes', maxes);
-      maxFound = true;
-    }
-
-    let bbox = PolyK.GetAABB(allPoints);
-    let center = {
-      x: bbox.x + bbox.width / 2,
-      y: bbox.y + bbox.height / 2
-    };
-    centers.push(center);
   });
+  maxes = PolyK.GetAABB(allPoints);
 
-  totalArea = areas.reduce((a, b) => a + b, 0);
-  centers.forEach((c, i) => {
-    totX += (c.x * areas[i]) / totalArea;
-    totY += (c.y * areas[i]) / totalArea;
-  });
-
-  return { x: totX, y: totY };
+  return maxes;
 }
 
 function finishAll(shapes, shapeTypes) {
-  const RotationCenter = calculateRotationCenter(shapes);
+  Returned = calculateRotationCenter(shapes);
+  let RotationCenter = {x: Returned.x+Returned.width/2, y: Returned.y+Returned.height/2}
   let totalInertia = 0;
-
+  console.log('RotationCenter', Returned);
   shapeTypes[0] = 'outside';
+  
   shapes.forEach((shape, i) => {
-    let inertiaSum = 0;
-    let gridPoints = generateGridInsideShape(shape, 1);
+  let inertiaSum = 0;
+    
+    let gridPoints = generateGridInsideShape(shape, 0.1);
 
     gridPoints.forEach(p => {
-      let d2 = (p.x - RotationCenter.x) ** 2 + (p.y - RotationCenter.y) ** 2;
+      //let d2 = (p.x - RotationCenter.x) ** 2 + (p.y - RotationCenter.y) ** 2;
+      let d2 = 0.01*(p.y - RotationCenter.y) ** 2;
+      
       inertiaSum += d2;
     });
 
@@ -69,7 +52,8 @@ function closeMomentPopup() {
 
 function calculateMoment() {
   const maxMoment = parseFloat(document.getElementById('maxMoment').value);
-  const result = (maxMoment * 9.81 * 1000 * maxes.width * 1e-3) / TotalInertia;
+  console.log('Height', Returned.height);
+  const result = (maxMoment * 9.81 * 1000 * 0.5*Returned.height * 1e-3) / TotalInertia;
 
   const resultMessage = `Total Inertia: ${TotalInertia.toFixed(4)} m4\n` +
                         `Maximum Moment: ${maxMoment} tonMeter\n` +

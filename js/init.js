@@ -6,6 +6,7 @@ const scale = 1.0;
 let lines = [], shapes = [], shapeTypes = [];
 let startPoint = null, currentEnd = null, isDrawing = false;
 let maxes, TotalInertia = 0;
+let Returned = {x: 0, y: 0, width: 0, height: 0};
 
 const originalLog = console.log;
 console.log = function(...args) {
