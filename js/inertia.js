@@ -51,7 +51,8 @@ function closeMomentPopup() {
 }
 
 function calculateMoment() {
-  const maxMoment = parseFloat(document.getElementById('maxMoment').value);
+  //const maxMoment = parseFloat(document.getElementById('maxMoment').value);
+  let maxMoment = maxMomentFromEduBeam
   console.log('Height', Returned.height);
   const result = (maxMoment * 9.81 * 1000 * 0.5*Returned.height * 1e-3) / TotalInertia;
 
