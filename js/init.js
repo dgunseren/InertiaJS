@@ -12,13 +12,17 @@ let maxMomentFromEduBeam = 0;
 window.addEventListener('message', (event) => {
   if (!event.data || event.data.type !== 'BendingMoment') return;
 
-  const { Mx } = event.data;
+  let { Mx } = event.data;
+  // Convert from N⋅m to ton⋅m (divide by 9810)
+  Mx = Mx / 9810;
   console.log('Received Mx:', Mx);
-  console.log('Hey sup dawg');
-  maxMomentFromEduBeam = Mx;
+  maxMomentFromEduBeam = Mx;  // Store the converted value
+  
+  // Update the real-time display
+  document.getElementById('momentDisplay').textContent = `Current Bending Moment: ${Mx.toFixed(2)} tonMeter`;
 
   // Set Mx into your moment input and call calculator
- //document.getElementById('maxMoment').value = Mx;
+  //document.getElementById('maxMoment').value = Mx;
   //calculateMoment(); // calls your existing inertia logic
 });
 
