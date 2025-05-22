@@ -30,6 +30,7 @@ function generateGridInsideShape(shape, cellSize) {
     for (let x = minX; x <= maxX; x += cellSize) {
       if (pointInPolygon([x, y], polygon)) {
         gridPoints.push({ x, y });
+        pingrid++;
       }
     }
   }
